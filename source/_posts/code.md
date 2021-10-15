@@ -6,6 +6,8 @@ tags: code
 
 ##### 最大异或数
 
+<!--more-->
+
 ```c++
 #include <iostream>
 #include <algorithm>
