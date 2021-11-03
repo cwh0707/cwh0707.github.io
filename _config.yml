@@ -114,10 +114,10 @@ live2d:
 		use: live2d-widget-model-koharu #模型选择
 	display: 
 		position: right  #模型位置
-		width: 300       #模型宽度
-		height: 450      #模型高度
+		width: 250       #模型宽度
+		height: 400      #模型高度
 	mobile: 
-		show: false      #是否在手机端显示
+		show: true     #是否在手机端显示
 
 
 # Deployment
