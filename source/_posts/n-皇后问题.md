@@ -55,6 +55,12 @@ Q...
 .Q..
 ```
 
+#### 算法流程描述
+
+使用dfs暴力搜索
+
+![n](./n-皇后问题/n.png)
+
 #### 代码
 
 ```c++
@@ -65,6 +71,7 @@ using namespace std;
 const int N = 10*2;
 
 int n;
+//dg代表对角线 udg代表反对角线 col代表列
 int col[N],dg[N],udg[N];
 char g[N][N];  //用来保存原来的棋盘
 
@@ -73,7 +80,8 @@ void dfs(int u)  //u表示的是当前遍历的第u行元素
     if( u==n )  //说明遍历完成，输出存储的结果即可
     {
         for(int i=0;i<n;i++)
-            printf("%s\n",g[i]);
+            //%s 输出的是一维数据
+            printf("%s\n",g[i]); 
         printf("\n");
         return ;
     }
