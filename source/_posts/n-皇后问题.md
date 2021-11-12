@@ -1,15 +1,16 @@
 ---
 title: n-皇后问题
-date: 2021-10-16 08:07:07
 tags: dfs
-categories: 
-- Acwing
-- DFS
+categories:
+  - Acwing
+  - DFS
+abbrlink: 23653
+date: 2021-10-16 08:07:07
 ---
 
 n−皇后问题是指将 n 个皇后放在 n×n 的国际象棋棋盘上，使得皇后不能相互攻击到，即任意两个皇后都不能处于同一行、同一列或同一斜线上。
 
-![1_597ec77c49-8-queens.png](./n-皇后问题/n-queue.png)
+![n-queens.png](./n-皇后问题/n-queue.png)
 
 现在给定整数 n，请你输出所有的满足条件的棋子摆法。
 
@@ -59,7 +60,7 @@ Q...
 
 使用dfs暴力搜索
 
-![n](./n-皇后问题/n.png)
+![算法过程](./n-皇后问题/算法过程.png)
 
 #### 代码
 
@@ -112,6 +113,65 @@ int main()
     return 0;
 }
 ```
+
+
+
+---
+
+#### 解法二 按位搜索
+
+```c++
+#include <iostream>
+
+using namespace std;
+
+const int N = 20;
+
+int n;
+bool row[N],col[N],dg[N],udg[N];
+char g[N][N];
+
+//q指代现在已经有多少个皇后
+void dfs(int x,int y,int q)
+{
+    if(q > n) return;
+    if(y == n)
+    {
+        x++;
+        y=0;
+    }
+    if( x == n)
+    {
+        if(q == n)
+        {
+            for(int i=0;i<n;i++)
+                printf("%s ",g[i]);
+            printf("\n");
+        }
+        return ;
+    }
+    
+    g[x][y] = '.';
+    if(!row[x] && !col[y] && !dg[y - x + n] && !udg[y + x])
+    {
+        row[x] = col[y] = dg[y - x + n] = udg[y + x] = true;
+        g[x][y] = 'Q';
+        dfs(x, y+1, q+1);
+        row[x] = col[y] = dg[y - x + n] = udg[y + x] = false;
+        g[x][y] = '.';
+    }
+    dfs(x, y+1， q);
+}
+
+int main()
+{
+    cin >> n;
+    dfs(0,0,0);
+    return 0;
+}
+```
+
+
 
 
 
