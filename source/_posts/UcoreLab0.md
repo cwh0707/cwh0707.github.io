@@ -79,7 +79,6 @@ ps
 # 将会列出系统当前运行的所有进程
 ps -a # 列出系统当前运行的所有进程，包括其他用户启动的
 
-
 [ucore]:~$ ps
 PID TTY          TIME CMD
 21071 pts/1    00:00:00 bash
@@ -197,7 +196,7 @@ fg
   ~/.vimrc
   ```
 
-  注：.vimrc默认情况不可见，ls -a，如果'~'目录下不存在，可以手动创建
+  注：.vimrc默认情况不可见，ls -a，如果~目录下不存在，可以手动创建
 
 2. 源码阅读工具
 
@@ -225,7 +224,7 @@ fg
 
    只需要了解到最简单的`make qemu`即可
 
-#### 编程开发调试中的基本工具 gcc、gdb、make、makefile 
+### 编程开发调试中的基本工具 gcc、gdb、make、makefile 
 
 1. gcc的基本用法
 
@@ -280,7 +279,7 @@ fg
            Intel:  [basepointer + indexpointer × indexscale + imm32)
    ```
 
-   如果操作系统处于保护模式下，使用的是32位的线性地址，在计算地址的时候不用考虑segmen:offset的问题
+   如果操作系统处于保护模式下，使用的是32位的线性地址，在计算地址的时候不用考虑segment:offset的问题
 
    上面的地址应该为：
 
@@ -303,3 +302,4 @@ fg
    ```
 
    
+
