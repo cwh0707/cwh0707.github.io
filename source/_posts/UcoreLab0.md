@@ -33,9 +33,9 @@ cat <filename>
 
 `注：在本文中所有带<>符号的参数都无需加""，直接加对应的符号`
 
-less 和 more显示比较大的文本文件内容
-
 <!--more-->
+
+less 和 more显示比较大的文本文件内容
 
 3. 复制文件：cp
 
@@ -301,5 +301,78 @@ fg
    		AT&T: _array(%ebx, %eax,8)     Intel: [ebx + eax × 8 + _array]
    ```
 
+   3. GCC基本内联汇编
    
+      GCC提供了两种内联汇编语句
+   
+      - 基本内联汇编语句
+   
+        ```shell
+        asm("statement")
+        
+        #例如
+        
+        asm("nop");
+        asm("cli");
+        ```
+   
+        "asm"和"_asm_"的含义是完全一样的。如果有多行汇编，每一行都要加上"\n\t"
+   
+        这样可以让gcc把内联汇编代码翻译成一般的汇编代码时能够保证换行和留有一定的空格（增加了可读性）。对于基本的asm语句，GCC编译出来的代码就是双引号里的内容
+   
+        ```shell
+        asm("pushl %eax\n\t"
+        	"movl $0,%eax\n\t"
+        	"popl %eax"
+        );
+        ```
+   
+        而实际gcc在处理汇编是，是要把asm(...)的内容打印到汇编文件中
+   
+      - 扩展内联汇编语句
+   
+        这个太难，用到的时候再看看~，先鸽着
+   
+   4. make和makefile
+   
+      GUN make是一种代码维护工具，在中大型项目中，他将根据程序各个模块的更新情况，自动的维护和生成目标代码
+   
+      make命令执行时，需要一个Makefile文件，用来告诉make命令需要怎么样的去编译和链接程序。
+   
+      ```shell
+      # 场景模拟 
+      # 现在我们的project有8个c文件，和3个头文件
+      # 现在需要你写一个makefile来告诉make如何编译和链接这几个文件
+      
+      #规则如下：
+      
+      # 	1. 如果这个工程没有被编译过，那么所有的c文件都要编译和链接
+      #   2. 如果这个project的某几个c文件被修改，那么只编译修改过的c文件，并链接目标程序
+      #   3. 如果这个project的头文件改变了，那么需要编译引用了这几个头文件的c文件，并链接目标程序
+      
+      # 只要makefile写的足够好的情况下，只用一个make命令就可以完成
+      ```
+   
+      + makefile规则
+   
+        ```c
+        target... : prerequisites...
+            command
+            ...
+            ...
+        ```
+   
+        target：目标文件，可以是object file，也可以是可执行文件。甚至可以是一个标签label
+   
+        prerequisites：要生成那个target所需要的文件或者目标
+   
+        command：make需要执行的命令（任意的shell命令）
+   
+        由此可知，target这一个或者多个的目标文件依赖于prerequisites中的文件，其生成规则在command中，如果prerequisites中有一个以上的文件比target文件要新一点，那么command定义的命令就会被执行。这就是makefile的核心规则
+   
+   5. gdb的使用（非常重要）
+   
+      在可以使用gdb调试程序前，必须使用-g或者-ggdb编译选项编译源文件。运行gdb
+   
+      ``` gdb progname```
 
