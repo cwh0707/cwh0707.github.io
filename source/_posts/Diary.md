@@ -1,5 +1,5 @@
 ---
-title: 测试
+title: Diary
 mathjax: true
 tags: Acwing
 categories:
