@@ -29,7 +29,7 @@
 <meta property="og:description" content="题目大意给定一个 n×m 的二维整数数组，用来表示一个迷宫，数组中只包含 0 或 1，其中 0 表示可以走的路，1 表示不可通过的墙壁。 最初，有一个人位于左上角 (1,1) 处，已知该人每次可以向上、下、左、右任意一个方向移动一个位置。 请问，该人从左上角移动至右下角 (n,m) 处，至少需要移动多少次。 数据保证 (1,1) 处和 (n,m) 处的数字为 0，且一定至少存在一条通路。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-11-14T23:57:12.000Z">
-<meta property="article:modified_time" content="2022-11-19T02:35:55.660Z">
+<meta property="article:modified_time" content="2021-11-15T16:09:44.000Z">
 <meta property="article:author" content="Jason">
 <meta property="article:tag" content="Acwing">
 <meta name="twitter:card" content="summary">
@@ -334,7 +334,7 @@ mjx-container[display="true"] + br {
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-11-19 10:35:55" itemprop="dateModified" datetime="2022-11-19T10:35:55+08:00">2022-11-19</time>
+                <time title="修改时间：2021-11-16 00:09:44" itemprop="dateModified" datetime="2021-11-16T00:09:44+08:00">2021-11-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -387,17 +387,22 @@ mjx-container[display="true"] + br {
 <p>请问，该人从左上角移动至右下角 (n,m) 处，至少需要移动多少次。</p>
 <p>数据保证 (1,1) 处和 (n,m) 处的数字为 0，且一定至少存在一条通路。</p>
 <span id="more"></span>
+
 <h4 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h4><p>第一行包含两个整数 n 和 m。</p>
 <p>接下来 n 行，每行包含 m 个整数（0 或 1），表示完整的二维数组迷宫。</p>
 <h4 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h4><p>输出一个整数，表示从左上角移动至右下角的最少移动次数。</p>
 <h4 id="数据范围"><a href="#数据范围" class="headerlink" title="数据范围"></a>数据范围</h4><p>1≤n,m≤100</p>
 <h4 id="输入样例："><a href="#输入样例：" class="headerlink" title="输入样例："></a>输入样例：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">5 5</span><br><span class="line">0 1 0 0 0</span><br><span class="line">0 1 0 1 0</span><br><span class="line">0 0 0 0 0</span><br><span class="line">0 1 1 1 0</span><br><span class="line">0 0 0 1 0</span><br></pre></td></tr></table></figure>
+
 <h4 id="输出样例："><a href="#输出样例：" class="headerlink" title="输出样例："></a>输出样例：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
+
 <h4 id="算法思路："><a href="#算法思路：" class="headerlink" title="算法思路："></a>算法思路：</h4><p>由于是需要求出最短路径，可以很容易地发现每条边的权值为1，可以很快地想到使用bfs，考虑这里是一个二维数组，在数据的存储上可能会有点差错，在这里为了熟悉模拟队列的操作，选择使用数组来模拟队列，只需要一个数组，一个队首指针hh和一个队尾tt即可，</p>
 <p>bfs是具有模板的(概括一下)如下所示:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="comment">//初始化状态，刚开始队列为空，先将第一个元素放进队列中去,并让指针指向队列的下一个元素</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(hh &lt;= tt) <span class="comment">//当队列不为空时</span></span><br><span class="line">    {</span><br><span class="line">     	<span class="comment">//取出队首元素</span></span><br><span class="line">        <span class="comment">//判断对应的条件</span></span><br><span class="line">        <span class="comment">//如果为true，那么将该元素置入队尾，并且将队尾指针往后移</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
 <p>具体代码实现如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span> <span class="comment">//pair</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span> <span class="comment">//memset </span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">110</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> pair&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; PII;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义一个队列</span></span><br><span class="line">PII q[N * N];</span><br><span class="line"><span class="comment">// 队首和队尾</span></span><br><span class="line"><span class="keyword">int</span> hh,tt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="keyword">int</span> g[N][N];</span><br><span class="line"><span class="comment">//存储每个点到（0,0）的距离distance</span></span><br><span class="line"><span class="keyword">int</span> d[N][N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="comment">//初始化条件</span></span><br><span class="line">    <span class="built_in">memset</span>(d, <span class="number">-1</span>, <span class="keyword">sizeof</span> d);</span><br><span class="line">    <span class="comment">// 将原点放入到队首</span></span><br><span class="line">    q[<span class="number">0</span>] = {<span class="number">0</span>,<span class="number">0</span>};</span><br><span class="line">    d[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 存储上下左右四个方向</span></span><br><span class="line">    <span class="keyword">int</span> dx[<span class="number">4</span>] = {<span class="number">-1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>};</span><br><span class="line">    <span class="keyword">int</span> dy[<span class="number">4</span>] = {<span class="number">0</span>, <span class="number">1</span>, <span class="number">-1</span>, <span class="number">0</span>};</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(hh &lt;= tt)   <span class="comment">//当队列不为空时</span></span><br><span class="line">    {</span><br><span class="line">        PII t = q[hh ++];  <span class="comment">//取出队首元素</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)</span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">int</span> x = t.first + dx[i];</span><br><span class="line">            <span class="keyword">int</span> y = t.second + dy[i];</span><br><span class="line">            <span class="comment">//如果该处没有使用过 并且走的通的话</span></span><br><span class="line">            <span class="keyword">if</span>(x &gt;= <span class="number">0</span> &amp;&amp; x &lt; n &amp;&amp; y &gt;= <span class="number">0</span> &amp;&amp; y &lt; m &amp;&amp; d[x][y] == <span class="number">-1</span> &amp;&amp; g[x][y] == <span class="number">0</span>)</span><br><span class="line">            {</span><br><span class="line">                d[x][y] = d[t.first][t.second] + <span class="number">1</span>;</span><br><span class="line">                q[++ tt] = {x, y}; <span class="comment">//将对应元素加入队列</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> d[n<span class="number">-1</span>][m<span class="number">-1</span>];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;m;j++)</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;g[i][j]);</span><br><span class="line">            </span><br><span class="line">    cout &lt;&lt; <span class="built_in">bfs</span>() &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
 <p>ps：（也可以使用stl的queue来实现，会比数组模拟会好理解的多，明天再补，不能熬夜~，就酱紫）</p>
 
     </div>
@@ -500,20 +505,20 @@ mjx-container[display="true"] + br {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

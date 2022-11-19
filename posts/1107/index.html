@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/hhh-32%C3%9732.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/hhh-16%C3%9716.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"cwh0707.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前缀和与差分前缀和 首先我们需要了解什么是前缀和 假设有一个数组：a[1],a[2]…a[i] 那么它的前缀和数组就是:s[i] &#x3D;  a[1] + a[2] + … + a[i] 注意：在前缀和与差分中没有使用下标为0的情况，用以减少判断条件  需要解决的问题：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构day03">
+<meta property="og:url" content="https://cwh0707.github.io/posts/1107/index.html">
+<meta property="og:site_name" content="Lin">
+<meta property="og:description" content="前缀和与差分前缀和 首先我们需要了解什么是前缀和 假设有一个数组：a[1],a[2]…a[i] 那么它的前缀和数组就是:s[i] &#x3D;  a[1] + a[2] + … + a[i] 注意：在前缀和与差分中没有使用下标为0的情况，用以减少判断条件  需要解决的问题：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-12-15T23:05:30.000Z">
+<meta property="article:modified_time" content="2021-12-17T15:45:04.000Z">
+<meta property="article:author" content="Jason">
+<meta property="article:tag" content="大整数乘法">
+<meta property="article:tag" content="大整数除法">
+<meta property="article:tag" content="前缀和">
+<meta property="article:tag" content="差分">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://cwh0707.github.io/posts/1107/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据结构day03 | Lin</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lin</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">人活着就是为了樱岛麻衣</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cwh0707.github.io/posts/1107/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.webp">
+      <meta itemprop="name" content="Jason">
+      <meta itemprop="description" content="三玖天下第一">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lin">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据结构day03
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-16 07:05:30" itemprop="dateCreated datePublished" datetime="2021-12-16T07:05:30+08:00">2021-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 23:45:04" itemprop="dateModified" datetime="2021-12-17T23:45:04+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/posts/1107/" class="post-meta-item leancloud_visitors" data-flag-title="数据结构day03" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/1107/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/1107/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前缀和与差分"><a href="#前缀和与差分" class="headerlink" title="前缀和与差分"></a>前缀和与差分</h2><h3 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h3><blockquote>
+<p>首先我们需要了解什么是前缀和</p>
+<p>假设有一个数组：a[1],a[2]…a[i]</p>
+<p>那么它的前缀和数组就是:s[i] =  a[1] + a[2] + … + a[i]</p>
+<p>注意：在前缀和与差分中没有使用下标为0的情况，用以减少判断条件</p>
+</blockquote>
+<p>需要解决的问题：</p>
+<span id="more"></span>
+
+<ul>
+<li>如何计算前缀和数组S[i]？</li>
+<li>这个前缀和思想可以应用在什么地方？</li>
+</ul>
+<p>前缀和使用的场景只有一个，可以快速计算该数组某个区间段[l,r]之间的和，O（1）的复杂度</p>
+<p>好像之后会学到的树状数组获取区间dp优化的时候可能会用上，到时候碰到再说。</p>
+<p>PS：前缀和并非是一个算法，只能说是一种思想，把它当做一个公式来看就好</p>
+<hr>
+<p>问题描述：</p>
+<p>输入一个长度为 n 的整数序列。</p>
+<p>接下来再输入 m 个询问，每个询问输入一对 l,r。</p>
+<p>对于每个询问，输出原序列中从第 l 个数到第 r 个数的和。</p>
+<p>输入格式：</p>
+<p>第一行包含两个整数 n 和 m。</p>
+<p>第二行包含 n 个整数，表示整数数列。</p>
+<p>接下来 m 行，每行包含两个整数 l和 r，表示一个询问的区间范围。</p>
+<p>输出格式：</p>
+<p>共 m 行，每行输出一个询问的结果。</p>
+<p>数据范围：</p>
+<p>1 ≤ l ≤ r ≤ n,<br>1 ≤ n,m ≤ 100000<br>−1000 ≤ 数列中元素的值 ≤ 1000</p>
+<p>输入样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">5 3</span><br><span class="line">2 1 3 6 4</span><br><span class="line">1 2</span><br><span class="line">1 3</span><br><span class="line">2 4</span><br></pre></td></tr></table></figure>
+
+
+
+<p>输出样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">6</span><br><span class="line">10</span><br></pre></td></tr></table></figure>
+
+<h4 id="C-代码实现"><a href="#C-代码实现" class="headerlink" title="C++代码实现"></a>C++代码实现</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1e5</span> + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a[N],s[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">int</span> n,m;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;a[i]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= n; i++) s[i] = s[i<span class="number">-1</span>] + a[i];</span><br><span class="line">    <span class="keyword">while</span>( m-- )</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">int</span> l,r;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; l &gt;&gt; r;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; s[r] - s[l<span class="number">-1</span>] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h3 id="二维前缀和"><a href="#二维前缀和" class="headerlink" title="二维前缀和"></a>二维前缀和</h3><blockquote>
+<p>将一维前缀和方法拓展了一下，可以用于计算子矩阵的整体和</p>
+</blockquote>
+<hr>
+<p>问题描述：</p>
+<p>输入一个 n 行 m 列的整数矩阵，再输入 q 个询问，每个询问包含四个整数 x1,y1,x2,y2，表示一个子矩阵的左上角坐标和右下角坐标。</p>
+<p>对于每个询问输出子矩阵中所有数的和。</p>
+<p>输入格式：</p>
+<p>第一行包含三个整数 n，m，q。</p>
+<p>接下来 n 行，每行包含 m 个整数，表示整数矩阵。</p>
+<p>接下来 q 行，每行包含四个整数 x1,y1,x2,y2，表示一组询问。</p>
+<p>输出格式：</p>
+<p>共 q 行，每行输出一个询问的结果。</p>
+<p>数据范围:</p>
+<p>1≤n,m≤1000,<br>1≤q≤200000,<br>1≤x1≤x2≤n,<br>1≤y1≤y2≤m,<br>−1000≤矩阵内元素的值≤1000</p>
+<p>输入样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">3 4 3</span><br><span class="line">1 7 2 4</span><br><span class="line">3 6 2 8</span><br><span class="line">2 1 2 3</span><br><span class="line">1 1 2 2</span><br><span class="line">2 1 3 4</span><br><span class="line">1 3 3 4</span><br></pre></td></tr></table></figure>
+
+
+
+<p>输出样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">17</span><br><span class="line">27</span><br><span class="line">21</span><br></pre></td></tr></table></figure>
+
+<h4 id="C-代码实现-1"><a href="#C-代码实现-1" class="headerlink" title="C++代码实现"></a>C++代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1010</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a[N][N];</span><br><span class="line"><span class="keyword">int</span> s[N][N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">int</span> n,m,q;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m &gt;&gt; q;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m ;j++)</span><br><span class="line">        {</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;a[i][j]);</span><br><span class="line">            s[i][j] = s[i<span class="number">-1</span>][j] + s[i][j<span class="number">-1</span>] - s[i<span class="number">-1</span>][j<span class="number">-1</span>] + a[i][j];  <span class="comment">//初始化s[i][j]</span></span><br><span class="line">        }</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>( q-- )</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">int</span> x1,y1,x2,y2;</span><br><span class="line">        cin &gt;&gt; x1 &gt;&gt; y1 &gt;&gt; x2 &gt;&gt; y2;</span><br><span class="line">        cout &lt;&lt; s[x2][y2] - s[x1<span class="number">-1</span>][y2] - s[x2][y1<span class="number">-1</span>] + s[x1<span class="number">-1</span>][y1<span class="number">-1</span>] &lt;&lt; endl;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h3 id="差分"><a href="#差分" class="headerlink" title="差分"></a>差分</h3><blockquote>
+<p>差分与前缀和是一对逆运算，两者之间的关系相当于积分与微分一样</p>
+<p>定义：假设我们有数组a[1],a[2],a[3],…a[i]</p>
+<p>那么对应的差分数组b：b[1],b[2],b[3],…b[n]</p>
+<p>满足a[i] = b[1] + b[2] + … + b[i]</p>
+<p>推导一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">b[1] = a[1]</span><br><span class="line">b[2] = a[2] - a[1]</span><br><span class="line">b[3] = a[3] - a[2]</span><br><span class="line">...</span><br><span class="line">b[i] = a[i] - a[i-1]</span><br></pre></td></tr></table></figure>
+
+<p>可以很明显看出两者互为逆运算</p>
+</blockquote>
+<p>但是有个问题，差分可以用来计算什么呢？</p>
+<p>它的用处在于在O(1)的复杂度，使得a数组在[l,r]之间的数全部加上c</p>
+<p>还有一个很nb的写法，就是我们输入的是a[]数组，我们如何使用上述方法得到b[]数组呢？可以将每位b[i]的输入设想成[i,i]区间插入a[i]，这个思路来计算，非常牛逼</p>
+<hr>
+<h4 id="一阶差分"><a href="#一阶差分" class="headerlink" title="一阶差分"></a>一阶差分</h4><p>题目描述：</p>
+<p>输入一个长度为 n 的整数序列。</p>
+<p>接下来输入 m 个操作，每个操作包含三个整数 l,r,c，表示将序列中 [l,r] 之间的每个数加上 c。</p>
+<p>请你输出进行完所有操作后的序列。</p>
+<p>输入格式：</p>
+<p>第一行包含两个整数 n 和 m。</p>
+<p>第二行包含 n 个整数，表示整数序列。</p>
+<p>接下来 m 行，每行包含三个整数 l，r，c，表示一个操作。</p>
+<p>输出格式：</p>
+<p>共一行，包含 n 个整数，表示最终序列。</p>
+<p>数据范围：</p>
+<p>1≤n,m≤100000,<br>1≤l≤r≤n,<br>−1000≤c≤1000,<br>−1000≤整数序列中元素的值≤1000</p>
+<p>输入样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">6 3</span><br><span class="line">1 2 2 1 2 1</span><br><span class="line">1 3 1</span><br><span class="line">3 5 1</span><br><span class="line">1 6 1</span><br></pre></td></tr></table></figure>
+
+
+
+<p>输出样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 4 5 3 4 2</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="C-代码实现-2"><a href="#C-代码实现-2" class="headerlink" title="C++代码实现"></a>C++代码实现</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1e5</span> + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a[N], b[N]; <span class="comment">// b存储的差分数组</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//在区间[l,r]之间的数全部加上c</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    b[l] += c;</span><br><span class="line">    b[r + <span class="number">1</span>] -= c;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">int</span> n, m;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;a[i]);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">insert</span>(i, i, a[i]);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>( m-- )</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">int</span> l, r, c;</span><br><span class="line">        cin &gt;&gt; l &gt;&gt; r &gt;&gt; c;</span><br><span class="line">        <span class="built_in">insert</span>(l, r, c);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">//输出对应的a数组 b数组的前缀和就是a数组</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) </span><br><span class="line">    {</span><br><span class="line">        b[i] += b[ i<span class="number">-1</span> ];</span><br><span class="line">        cout &lt;&lt; b[i] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    }</span><br><span class="line">    cout &lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="差分矩阵"><a href="#差分矩阵" class="headerlink" title="差分矩阵"></a>差分矩阵</h4><p>题目描述：</p>
+<p>输入一个 n 行 m 列的整数矩阵，再输入 q 个操作，每个操作包含五个整数 x1,y1,x2,y2,c，其中 (x1,y1)和 (x2,y2)表示一个子矩阵的左上角坐标和右下角坐标。</p>
+<p>每个操作都要将选中的子矩阵中的每个元素的值加上 c。</p>
+<p>请你将进行完所有操作后的矩阵输出。</p>
+<p>输入格式</p>
+<p>第一行包含整数 n,m,q。</p>
+<p>接下来 n 行，每行包含 m 个整数，表示整数矩阵。</p>
+<p>接下来 q 行，每行包含 5个整数 x1,y1,x2,y2,c，表示一个操作。</p>
+<p>输出格式</p>
+<p>共 n 行，每行 m 个整数，表示所有操作进行完毕后的最终矩阵。</p>
+<p>数据范围</p>
+<p>1≤n,m≤1000<br>1≤q≤100000<br>1≤x1≤x2≤n<br>1≤y1≤y2≤m<br>−1000≤c≤1000<br>−1000≤矩阵内元素的值≤1000</p>
+<p>输入样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">3 4 3</span><br><span class="line">1 2 2 1</span><br><span class="line">3 2 2 1</span><br><span class="line">1 1 1 1</span><br><span class="line">1 1 2 2 1</span><br><span class="line">1 3 2 3 2</span><br><span class="line">3 1 3 4 1</span><br></pre></td></tr></table></figure>
+
+
+
+<p>输出样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2 3 4 1</span><br><span class="line">4 3 4 1</span><br><span class="line">2 2 2 2</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="C-代码实现-3"><a href="#C-代码实现-3" class="headerlink" title="C++代码实现"></a>C++代码实现</h4><p>难点在于：</p>
+<p>insert函数构造，数学推导hh，可以自己画个矩阵来验算一下</p>
+<p>其中b[][]矩阵是我们构造出来的差分矩阵，它的前缀和就是a矩阵</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1010</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a[N][N];</span><br><span class="line"><span class="keyword">int</span> b[N][N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> x1, <span class="keyword">int</span> y1, <span class="keyword">int</span> x2, <span class="keyword">int</span> y2, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    b[x1][y1] += c;</span><br><span class="line">    b[x2 + <span class="number">1</span>][y1] -= c;</span><br><span class="line">    b[x1][y2 + <span class="number">1</span>] -= c;</span><br><span class="line">    b[x2 + <span class="number">1</span>][y2 + <span class="number">1</span>] += c;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">int</span> n, m, q;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m &gt;&gt; q;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++)</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;a[i][j]);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j&lt;= m; j++)</span><br><span class="line">            <span class="built_in">insert</span>(i, j, i, j, a[i][j]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>( q-- )</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">int</span> x1, y1, x2, y2, c;</span><br><span class="line">        cin &gt;&gt; x1 &gt;&gt; y1 &gt;&gt; x2 &gt;&gt; y2 &gt;&gt; c;</span><br><span class="line">        <span class="built_in">insert</span>(x1, y1, x2, y2, c);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;= n; i++)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m ;j++)</span><br><span class="line">        {</span><br><span class="line">            b[i][j] += b[i - <span class="number">1</span>][j] + b[i][j<span class="number">-1</span>] - b[i<span class="number">-1</span>][j<span class="number">-1</span>];</span><br><span class="line">            cout &lt;&lt; b[i][j] &lt;&lt;  <span class="string">" "</span>;</span><br><span class="line">        }</span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%95%B4%E6%95%B0%E4%B9%98%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 大整数乘法</a>
+              <a href="/tags/%E5%A4%A7%E6%95%B4%E6%95%B0%E9%99%A4%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 大整数除法</a>
+              <a href="/tags/%E5%89%8D%E7%BC%80%E5%92%8C/" rel="tag"><i class="fa fa-tag"></i> 前缀和</a>
+              <a href="/tags/%E5%B7%AE%E5%88%86/" rel="tag"><i class="fa fa-tag"></i> 差分</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/50322/" rel="prev" title="数据结构day02">
+      <i class="fa fa-chevron-left"></i> 数据结构day02
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/50706/" rel="next" title="数据结构day04">
+      数据结构day04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86"><span class="nav-number">1.</span> <span class="nav-text">前缀和与差分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BC%80%E5%92%8C"><span class="nav-number">1.1.</span> <span class="nav-text">前缀和</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">C++代码实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C"><span class="nav-number">1.2.</span> <span class="nav-text">二维前缀和</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">C++代码实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%AE%E5%88%86"><span class="nav-number">1.3.</span> <span class="nav-text">差分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E9%98%B6%E5%B7%AE%E5%88%86"><span class="nav-number">1.3.1.</span> <span class="nav-text">一阶差分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-2"><span class="nav-number">1.3.2.</span> <span class="nav-text">C++代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%AE%E5%88%86%E7%9F%A9%E9%98%B5"><span class="nav-number">1.3.3.</span> <span class="nav-text">差分矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-3"><span class="nav-number">1.3.4.</span> <span class="nav-text">C++代码实现</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Jason"
+      src="/images/avatar.webp">
+  <p class="site-author-name" itemprop="name">Jason</p>
+  <div class="site-description" itemprop="description">三玖天下第一</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+<div id = "music163player">
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1889674362&auto=0&height=66"></iframe>
+</div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jason</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'fM57AVQq78R8cMTbcnjFem3L-MdYXbMMI',
+      appKey     : 'vXJ6hX3YByytp1Puk2fOCIf6',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+  
+    <script src="/js/cursor/fireworks.js"></script>
+  
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":250,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
