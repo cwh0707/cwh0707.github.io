@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/hhh-32%C3%9732.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/hhh-16%C3%9716.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"cwh0707.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="UcoreLab0 实验准备实验环境设置Linux常用指令 在屏幕上输出字符：echo  1echo &quot;hello world&quot;  显示文件内容：cat、less、more  1cat &lt;filename&gt; 注：在本文中所有带&lt;&gt;符号的参数都无需加&quot;&quot;，直接加对应的符号">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UcoreLab0">
+<meta property="og:url" content="https://cwh0707.github.io/posts/34866/index.html">
+<meta property="og:site_name" content="Lin">
+<meta property="og:description" content="UcoreLab0 实验准备实验环境设置Linux常用指令 在屏幕上输出字符：echo  1echo &quot;hello world&quot;  显示文件内容：cat、less、more  1cat &lt;filename&gt; 注：在本文中所有带&lt;&gt;符号的参数都无需加&quot;&quot;，直接加对应的符号">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-12T00:25:43.000Z">
+<meta property="article:modified_time" content="2022-11-19T02:35:55.660Z">
+<meta property="article:author" content="Jason">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="Ucore">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://cwh0707.github.io/posts/34866/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>UcoreLab0 | Lin</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lin</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">人活着就是为了樱岛麻衣</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cwh0707.github.io/posts/34866/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.webp">
+      <meta itemprop="name" content="Jason">
+      <meta itemprop="description" content="三玖天下第一">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lin">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UcoreLab0
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-12 08:25:43" itemprop="dateCreated datePublished" datetime="2021-11-12T08:25:43+08:00">2021-11-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-19 10:35:55" itemprop="dateModified" datetime="2022-11-19T10:35:55+08:00">2022-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/Ucore/" itemprop="url" rel="index"><span itemprop="name">Ucore</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/posts/34866/" class="post-meta-item leancloud_visitors" data-flag-title="UcoreLab0" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/34866/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/34866/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Ucore"><a href="#Ucore" class="headerlink" title="Ucore"></a>Ucore</h1><h2 id="Lab0-实验准备"><a href="#Lab0-实验准备" class="headerlink" title="Lab0 实验准备"></a>Lab0 实验准备</h2><h3 id="实验环境设置"><a href="#实验环境设置" class="headerlink" title="实验环境设置"></a>实验环境设置</h3><h4 id="Linux常用指令"><a href="#Linux常用指令" class="headerlink" title="Linux常用指令"></a>Linux常用指令</h4><ol>
+<li>在屏幕上输出字符：echo</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo "hello world"</span><br></pre></td></tr></table></figure>
+<ol>
+<li>显示文件内容：cat、less、more</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;filename&gt;</span><br></pre></td></tr></table></figure>
+<p><code>注：在本文中所有带&lt;&gt;符号的参数都无需加""，直接加对应的符号</code></p>
+<span id="more"></span>
+<p>less 和 more显示比较大的文本文件内容</p>
+<ol>
+<li>复制文件：cp</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp &lt;filename.txt&gt; &lt;filename_copy.txt&gt;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>移动文件：mv</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv &lt;filename.txt&gt; &lt;filename_new.txt&gt;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>建立一个空文本文件：touch</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch demo.txt</span><br></pre></td></tr></table></figure>
+<ol>
+<li>删除文件：rm</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rm -rf # -r是递归删除 -f是强制删除</span><br><span class="line">rm -i &lt;filename.txt&gt; # 系统在执行删除操作之前输出一条确认提示</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 特别注意 如果每次都忘记输入i的话 可以让rm的 -i变成默认参数</span></span><br><span class="line">alias rm = 'rm -i'</span><br></pre></td></tr></table></figure>
+<ol>
+<li>查询文件列表：ls</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls -p # 显示某一项的类型 ，可以使文件、文件夹、快捷链接等</span><br><span class="line">ls -a # 列出包括隐藏文件在内的所有文件</span><br></pre></td></tr></table></figure>
+<ol>
+<li>查询当前进程：ps</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ps</span><br><span class="line"><span class="meta">#</span><span class="bash"> 将会列出系统当前运行的所有进程</span></span><br><span class="line">ps -a # 列出系统当前运行的所有进程，包括其他用户启动的</span><br><span class="line"></span><br><span class="line">[ucore]:~$ ps</span><br><span class="line">PID TTY          TIME CMD</span><br><span class="line">21071 pts/1    00:00:00 bash</span><br><span class="line">22378 pts/1    00:00:00 ps</span><br></pre></td></tr></table></figure>
+<h4 id="Linux下的一些特性"><a href="#Linux下的一些特性" class="headerlink" title="Linux下的一些特性"></a>Linux下的一些特性</h4><ol>
+<li>重定向</li>
+</ol>
+<p>实现将命令产生的输出流指向一个文件而不是默认的终端</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ls  &gt;  &lt;filename.txt&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash">ls命令产生的输出 将会写入filename中，如果该文件不存在的话，将创建该文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果filename文件存在的话，那么将会覆盖原来的文件内容 那如果文件已经存在，但是我们想要将文件写到已有文件内容的最后该怎么办？ 使用  &gt;&gt;</span> </span><br><span class="line">command &gt;&gt; filename </span><br><span class="line">ls &gt;&gt;  &lt;filename.txt&gt;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">另一种重定向方式</span></span><br><span class="line">command &lt; filename</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 讲一个文件的内容作为将要执行的命令的输入</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 已有文件 file.txt 内容为 1.txt 2.txt 6.txt 5.txt &lt;Ctrl-D&gt;</span></span><br><span class="line">sort &lt; file.txt</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示效果</span></span><br><span class="line">1.txt 2.txt 5.txt 6.txt </span><br></pre></td></tr></table></figure>
+<ol>
+<li>管道</li>
+</ol>
+<p>Linux 的 nb之处在于将几个简单的命令组合成复杂的功能，它是如何实现的呢？答案是管道，管道符号为 | </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">grep -i command &lt; myfile | sort &gt; result.text</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 命令含义</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 搜索myfile中的命令，并将输出分类并写入到分类文件到result.text中</span></span><br><span class="line"></span><br><span class="line">ls -l | less</span><br></pre></td></tr></table></figure>
+<ol>
+<li>后台进程</li>
+</ol>
+<p>CLI不是系统的串行接口，可以在执行其他命令时给出系统命令</p>
+<p>要启动一个进程到后台，追加一个“&amp;”到命令后面</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sleep 60 &amp;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 睡眠命令在后台运行 您依然可以与计算机交互</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 除了不同步启动命令以外 最好将<span class="string">'&amp;'</span> 理解成 <span class="string">';'</span></span></span><br></pre></td></tr></table></figure>
+<p>如果现在你有一个命令会占用你非常多时间，我想让这个命令在后台运行<br>只需要在命令运行时按下ctrl+z，他就会停止，然后输入bg使其转入后台，输入fg命令可以使其转回前台</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sleep 60</span><br><span class="line">&lt;ctrl-z&gt; # ctrl+z 键</span><br><span class="line">bg</span><br><span class="line">fg</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> &lt;ctrl-c&gt; 为<span class="built_in">kill</span>一个前台进程</span></span><br></pre></td></tr></table></figure>
+<h4 id="需要了解和使用的一些软件"><a href="#需要了解和使用的一些软件" class="headerlink" title="需要了解和使用的一些软件"></a>需要了解和使用的一些软件</h4><ol>
+<li>编辑器</li>
+</ol>
+<ul>
+<li><p>gedit </p>
+<p>gedit是gnmoe桌面环境下兼容UTF-8的文本编辑器</p>
+<p>优点：语法高亮，中文支持很好，简单易用</p>
+</li>
+<li><p>vim</p>
+<p>vim天下第一好吧，unix下的vi的改进版本，功能极为强大，unbutu建议升级到vim最新版本</p>
+<p>[1] 了解vim的常用命令即使用，暂时空缺，下次再补</p>
+<p>[2] 配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">set nocompatible</span><br><span class="line">set encoding=utf-8</span><br><span class="line">set fileencodings=utf-8,chinese</span><br><span class="line">set tabstop=4</span><br><span class="line">set cindent shiftwidth=4</span><br><span class="line">set backspace=indent,eol,start</span><br><span class="line">autocmd Filetype c set omnifunc=ccomplete#Complete</span><br><span class="line">autocmd Filetype cpp set omnifunc=cppcomplete#Complete</span><br><span class="line">set incsearch</span><br><span class="line">set number</span><br><span class="line">set display=lastline</span><br><span class="line">set ignorecase</span><br><span class="line">syntax on</span><br><span class="line">set nobackup</span><br><span class="line">set ruler</span><br><span class="line">set showcmd</span><br><span class="line">set smartindent</span><br><span class="line">set hlsearch</span><br><span class="line">set cmdheight=1</span><br><span class="line">set laststatus=2</span><br><span class="line">set shortmess=atI</span><br><span class="line">set formatoptions=tcrqn</span><br><span class="line">set autoindent  </span><br></pre></td></tr></table></figure>
+<p>将删除配置文件保存到：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.vimrc</span><br></pre></td></tr></table></figure>
+<p>注：.vimrc默认情况不可见，ls -a，如果~目录下不存在，可以手动创建</p>
+</li>
+</ul>
+<ol>
+<li><p>源码阅读工具</p>
+<p>understand</p>
+<p>商业软件、跨平台</p>
+</li>
+<li><p>源码比较工具</p>
+</li>
+</ol>
+<ul>
+<li><p>diff、meld</p>
+<p>diff：用于比较不同目录或不同文件的区别</p>
+<p>diff是命令行工具，使用非常简单</p>
+<p><code>meld是一个图形GUI程序，非常好用，可以直接比较两个文件夹之间的差异，非常直观</code></p>
+</li>
+<li><p>patch</p>
+<p>patch是打补丁工具 他也是一个命令行工具</p>
+</li>
+</ul>
+<ol>
+<li><p>硬件模拟器 </p>
+<p>qemu</p>
+<p>只需要了解到最简单的<code>make qemu</code>即可</p>
+</li>
+</ol>
+<h3 id="编程开发调试中的基本工具-gcc、gdb、make、makefile"><a href="#编程开发调试中的基本工具-gcc、gdb、make、makefile" class="headerlink" title="编程开发调试中的基本工具 gcc、gdb、make、makefile"></a>编程开发调试中的基本工具 gcc、gdb、make、makefile</h3><ol>
+<li><p>gcc的基本用法</p>
+<p>安装gcc编译环境</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential</span><br></pre></td></tr></table></figure>
+<p>编译简单的c程序</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> hello.c 文件内容</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">include &lt;stdio.h&gt;</span></span><br><span class="line">int main()</span><br><span class="line">{</span><br><span class="line">	printf("hello,world\n");</span><br><span class="line">	return 0;</span><br><span class="line">}</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">在命令行下</span></span><br><span class="line">gcc -Wall hello.c -o hello</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">参数解释</span></span><br><span class="line">将hello.c中的代码编译成机器码并存储在可执行文件hello中</span><br><span class="line">机器码的文件名 是通过-o来指定的 这个参数通常作为最后一个参数</span><br><span class="line">如果被省略，那么默认输出为a.out</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -Wall 参数 为开启编译器几乎所有的常用的警告</span></span><br><span class="line"></span><br><span class="line">./hello # 执行文件 ./指代当前目录</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>AT&amp;T汇编基本语法</p>
+<p>AT&amp;T格式的汇编与Intel格式的汇编有一点差异，主要在以下几个方面</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 寄存器命名原则</span></span><br><span class="line">        AT&amp;T: %eax                      Intel: eax</span><br><span class="line"><span class="meta">#</span><span class="bash"> 源/目的操作数顺序</span> </span><br><span class="line">        AT&amp;T: movl %eax, %ebx           Intel: mov ebx, eax</span><br><span class="line"><span class="meta">#</span><span class="bash"> 常数/立即数的格式</span>　</span><br><span class="line">        AT&amp;T: movl $_value, %ebx        Intel: mov eax, _value</span><br><span class="line"><span class="meta">#</span><span class="bash"> 把value的地址放入eax寄存器</span></span><br><span class="line">        AT&amp;T: movl $0xd00d, %ebx        Intel: mov ebx, 0xd00d</span><br><span class="line"><span class="meta">#</span><span class="bash"> 操作数长度标识</span> </span><br><span class="line">        AT&amp;T: movw %ax, %bx             Intel: mov bx, ax</span><br><span class="line"><span class="meta">#</span><span class="bash"> 寻址方式</span> </span><br><span class="line">        AT&amp;T:   immed32(basepointer, indexpointer, indexscale)</span><br><span class="line">        Intel:  [basepointer + indexpointer × indexscale + imm32)</span><br></pre></td></tr></table></figure>
+<p>如果操作系统处于保护模式下，使用的是32位的线性地址，在计算地址的时候不用考虑segment:offset的问题</p>
+<p>上面的地址应该为：</p>
+<p><code>imm322 + basepointer + indexpointer × indexscale</code></p>
+<p>实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 直接寻址</span></span><br><span class="line">		AT&amp;T: foo                      Intel: [foo]</span><br><span class="line">		foo是一个全局变量，加上$表示地址引用，不加代表值引用</span><br><span class="line">		对于局部变量，可以使用堆栈指针引用</span><br><span class="line"><span class="meta">#</span><span class="bash"> 寄存器间接寻址</span></span><br><span class="line">		AT&amp;T: (%eax)                    Intel: [eax]</span><br><span class="line"><span class="meta">		</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 变址寻址</span></span><br><span class="line">		AT&amp;T: _variabl(%eax)           Intel: [eax + _variable]</span><br><span class="line">		AT&amp;T: _array( ,%eax, 4)        Intel: [eax × 4 + _array]</span><br><span class="line">		AT&amp;T: _array(%ebx, %eax,8)     Intel: [ebx + eax × 8 + _array]</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>GCC基本内联汇编</p>
+<p>GCC提供了两种内联汇编语句</p>
+<ul>
+<li><p>基本内联汇编语句</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">asm("statement")</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">例如</span></span><br><span class="line"></span><br><span class="line">asm("nop");</span><br><span class="line">asm("cli");</span><br></pre></td></tr></table></figure>
+<p>“asm”和”<em>asm</em>“的含义是完全一样的。如果有多行汇编，每一行都要加上”\n\t”</p>
+<p>这样可以让gcc把内联汇编代码翻译成一般的汇编代码时能够保证换行和留有一定的空格（增加了可读性）。对于基本的asm语句，GCC编译出来的代码就是双引号里的内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">asm("pushl %eax\n\t"</span><br><span class="line">	"movl $0,%eax\n\t"</span><br><span class="line">	"popl %eax"</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>而实际gcc在处理汇编是，是要把asm(…)的内容打印到汇编文件中</p>
+</li>
+<li><p>扩展内联汇编语句</p>
+<p>这个太难，用到的时候再看看~，先鸽着</p>
+</li>
+</ul>
+</li>
+<li><p>make和makefile</p>
+<p>GUN make是一种代码维护工具，在中大型项目中，他将根据程序各个模块的更新情况，自动的维护和生成目标代码</p>
+<p>make命令执行时，需要一个Makefile文件，用来告诉make命令需要怎么样的去编译和链接程序。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 场景模拟</span> </span><br><span class="line"><span class="meta">#</span><span class="bash"> 现在我们的project有8个c文件，和3个头文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 现在需要你写一个makefile来告诉make如何编译和链接这几个文件</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">规则如下：</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 	1. 如果这个工程没有被编译过，那么所有的c文件都要编译和链接</span></span><br><span class="line"><span class="meta">#</span><span class="bash">   2. 如果这个project的某几个c文件被修改，那么只编译修改过的c文件，并链接目标程序</span></span><br><span class="line"><span class="meta">#</span><span class="bash">   3. 如果这个project的头文件改变了，那么需要编译引用了这几个头文件的c文件，并链接目标程序</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 只要makefile写的足够好的情况下，只用一个make命令就可以完成</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>makefile规则</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">target... : prerequisites...</span><br><span class="line">    command</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>target：目标文件，可以是object file，也可以是可执行文件。甚至可以是一个标签label</p>
+<p>prerequisites：要生成那个target所需要的文件或者目标</p>
+<p>command：make需要执行的命令（任意的shell命令）</p>
+<p>由此可知，target这一个或者多个的目标文件依赖于prerequisites中的文件，其生成规则在command中，如果prerequisites中有一个以上的文件比target文件要新一点，那么command定义的命令就会被执行。这就是makefile的核心规则</p>
+</li>
+</ul>
+</li>
+<li><p>gdb的使用（非常重要）</p>
+<p>在可以使用gdb调试程序前，必须使用-g或者-ggdb编译选项编译源文件。运行gdb</p>
+<p><code>gdb progname</code></p>
+</li>
+</ol>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
+              <a href="/tags/Ucore/" rel="tag"><i class="fa fa-tag"></i> Ucore</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/39894/" rel="prev" title="python中的图的存储">
+      <i class="fa fa-chevron-left"></i> python中的图的存储
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/25805/" rel="next" title="bfs走迷宫问题">
+      bfs走迷宫问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ucore"><span class="nav-number">1.</span> <span class="nav-text">Ucore</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab0-%E5%AE%9E%E9%AA%8C%E5%87%86%E5%A4%87"><span class="nav-number">1.1.</span> <span class="nav-text">Lab0 实验准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.1.1.</span> <span class="nav-text">实验环境设置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Linux常用指令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux%E4%B8%8B%E7%9A%84%E4%B8%80%E4%BA%9B%E7%89%B9%E6%80%A7"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">Linux下的一些特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%BD%AF%E4%BB%B6"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">需要了解和使用的一些软件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91%E8%B0%83%E8%AF%95%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%B7%A5%E5%85%B7-gcc%E3%80%81gdb%E3%80%81make%E3%80%81makefile"><span class="nav-number">1.1.2.</span> <span class="nav-text">编程开发调试中的基本工具 gcc、gdb、make、makefile</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Jason"
+      src="/images/avatar.webp">
+  <p class="site-author-name" itemprop="name">Jason</p>
+  <div class="site-description" itemprop="description">三玖天下第一</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+<div id = "music163player">
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1889674362&auto=0&height=66"></iframe>
+</div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jason</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'fM57AVQq78R8cMTbcnjFem3L-MdYXbMMI',
+      appKey     : 'vXJ6hX3YByytp1Puk2fOCIf6',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+  
+    <script src="/js/cursor/fireworks.js"></script>
+  
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":250,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
