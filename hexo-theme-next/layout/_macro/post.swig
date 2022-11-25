@@ -47,7 +47,7 @@
           {%- set datetime_diff = date_diff or time_diff %}
 
           {%- if theme.post_meta.created_at %}
-            <span class="post-meta-item">
+            <span class="post-meta-item" title="{{ __('post.views') }}" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
