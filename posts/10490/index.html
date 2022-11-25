@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/hhh-32%C3%9732.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/hhh-16%C3%9716.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"cwh0707.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="张量 TensorTensor初始化 根据给定数据初始化，也就是我的矩阵直接喂给你  data&#x3D;[[1, 2],[3, 4]]  通过使用Numpy数组生成  12np_array &#x3D; np.array(data)x_np &#x3D; torch.from_numpy(np_array) 注: 实现将一个numpy数组使用from_numpy实现从numpy转换为tensor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pytorch入门">
+<meta property="og:url" content="https://cwh0707.github.io/posts/10490/index.html">
+<meta property="og:site_name" content="Lin">
+<meta property="og:description" content="张量 TensorTensor初始化 根据给定数据初始化，也就是我的矩阵直接喂给你  data&#x3D;[[1, 2],[3, 4]]  通过使用Numpy数组生成  12np_array &#x3D; np.array(data)x_np &#x3D; torch.from_numpy(np_array) 注: 实现将一个numpy数组使用from_numpy实现从numpy转换为tensor">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-25T16:30:04.000Z">
+<meta property="article:modified_time" content="2022-11-25T16:30:53.373Z">
+<meta property="article:author" content="Jason">
+<meta property="article:tag" content="pytorch">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://cwh0707.github.io/posts/10490/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>pytorch入门 | Lin</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lin</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">人活着就是为了樱岛麻衣</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cwh0707.github.io/posts/10490/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.webp">
+      <meta itemprop="name" content="Jason">
+      <meta itemprop="description" content="三玖天下第一">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lin">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pytorch入门
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-11-26 00:30:04 / 修改时间：00:30:53" itemprop="dateCreated datePublished" datetime="2022-11-26T00:30:04+08:00">2022-11-26</time>
+            </span>
+
+          
+            <span id="/posts/10490/" class="post-meta-item leancloud_visitors" data-flag-title="pytorch入门" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/10490/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/10490/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="张量-Tensor"><a href="#张量-Tensor" class="headerlink" title="张量 Tensor"></a>张量 Tensor</h1><h2 id="Tensor初始化"><a href="#Tensor初始化" class="headerlink" title="Tensor初始化"></a>Tensor初始化</h2><ol>
+<li>根据给定数据初始化，也就是我的矩阵直接喂给你</li>
+</ol>
+<p><code>data=[[1, 2],[3, 4]]</code></p>
+<ol>
+<li>通过使用Numpy数组生成</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np_array = np.array(data)</span><br><span class="line">x_np = torch.from_numpy(np_array)</span><br></pre></td></tr></table></figure>
+<p>注: 实现将一个numpy数组使用<code>from_numpy</code>实现从numpy转换为tensor</p>
+<span id="more"></span>
+<ol>
+<li>使用已有的Tensor生成新的Tensor</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x_ones = torch.one_like(x_data) # 保留x_data的属性</span><br><span class="line">print(f"Ones Tensor: \n{x_ones} \n")</span><br><span class="line"></span><br><span class="line">x_rand = torch.rand_like(x_data, dtype = torch.float)  # 更改x_date的属性：int -&gt; float</span><br><span class="line">print(f"Random Tensor: \n {x_rand} \n")</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>新的Tensor将继承已有Tensor的数据属性，也可以指定新的数据类型</p>
+</li>
+<li><p><code>print(f"xxxx{}xxx")</code>使用format格式的print打印输出，其中{}存放的可以是变量也可以是表达式</p>
+</li>
+</ul>
+<ol>
+<li>通过指定数据维度来生成Tensor</li>
+</ol>
+<p>记住，shape返回的是一个tuple元组类型，描述一下张量的维数，我以前一直很好奇，tensorflow和torch之间的张量到底有什么不同？？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">shape = (<span class="number">2</span>,<span class="number">3</span>,)  <span class="comment"># 对应于两行三列</span></span><br><span class="line">rand_tensor = torch.rand(shape)</span><br><span class="line">ones_tensor = torch.ones(shape)</span><br><span class="line">zeros_tensor = torch.zeros(shape)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"Random Tensor: \n <span class="subst">{rand_tensor}</span> \n"</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"Ones Tensor: \n <span class="subst">{ones_tensor}</span> \n"</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"Zeros Tensor: \n <span class="subst">{zeros_tensor}</span>"</span>)</span><br><span class="line"></span><br><span class="line">‘’‘</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">Random Tensor:</span><br><span class="line"> tensor([[<span class="number">0.0266</span>, <span class="number">0.0553</span>, <span class="number">0.9843</span>],</span><br><span class="line">         [<span class="number">0.0398</span>, <span class="number">0.8964</span>, <span class="number">0.3457</span>]])</span><br><span class="line"></span><br><span class="line">Ones Tensor:</span><br><span class="line"> tensor([[<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">         [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>]])</span><br><span class="line"></span><br><span class="line">Zeros Tensor:</span><br><span class="line"> tensor([[<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">         [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>]])</span><br><span class="line">’‘’</span><br></pre></td></tr></table></figure>
+<p>想一想，如果我的shape是一个三元组呢，去看看效果，例如<code>shape=（2,3,2）</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">shape = (<span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>)</span><br><span class="line">x_data = torch.rand(shape)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"This is a random tensor.\n<span class="subst">{x_data}</span>"</span>)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">This <span class="keyword">is</span> a random tensor.</span><br><span class="line">tensor([[[<span class="number">0.6546</span>, <span class="number">0.0505</span>],</span><br><span class="line">         [<span class="number">0.1988</span>, <span class="number">0.0101</span>],</span><br><span class="line">         [<span class="number">0.6763</span>, <span class="number">0.0885</span>]],</span><br><span class="line"></span><br><span class="line">        [[<span class="number">0.4273</span>, <span class="number">0.9512</span>],</span><br><span class="line">         [<span class="number">0.1284</span>, <span class="number">0.7970</span>],</span><br><span class="line">         [<span class="number">0.5022</span>, <span class="number">0.6480</span>]]])</span><br></pre></td></tr></table></figure>
+<p>从以上我们可以看到，当shape是一个二元组的情况下的话，那么<code>(2,3,)</code>这代指的是2行3列的矩阵，但是对于<code>（2,3,2）</code>这种形式上来看的话，从结果分析来看可以看出第一个是第三维度的情况，反而生成了2个<code>3*2</code>的矩阵，所以在这里我个人感觉应该第一个参数应该是第三维的长度</p>
+<h2 id="Tensor的运算"><a href="#Tensor的运算" class="headerlink" title="Tensor的运算"></a>Tensor的运算</h2><ol>
+<li><strong>Tensor的索引和切片</strong></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">data = torch.ones(<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line">data[:, <span class="number">1</span>] = <span class="number">0</span></span><br><span class="line"><span class="built_in">print</span>(data)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">tensor([[<span class="number">1.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">1.</span>]])</span><br></pre></td></tr></table></figure>
+<p>对于一个tensor来说，首先，行维度和列维度两者之间需要使用<code>,</code>之间进行分隔开来，前面的代表行数，后面代表列数，对于<code>data[:,1]</code>代表的是所有行，第一列的数据。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">data = torch.ones(4, 4)</span><br><span class="line">data[1:3, 2:4] = 0</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">tensor([[1., 1., 1., 1.],</span><br><span class="line">        [1., 1., 0., 0.],</span><br><span class="line">        [1., 1., 0., 0.],</span><br><span class="line">        [1., 1., 1., 1.]])</span><br></pre></td></tr></table></figure>
+<p>ok，fine这我们了解了非常熟悉的切片操作，我们应该跟python自带的list做个比较来看看，对比学习一下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">list</span> = [[[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],<span class="string">'cwh'</span>,<span class="literal">False</span>],[[<span class="number">4</span>,<span class="number">3</span>,<span class="number">1</span>],<span class="string">'lyr'</span>,<span class="literal">True</span>]]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"one line\n <span class="subst">{<span class="built_in">list</span>[<span class="number">0</span>]}</span> \ntwo line \n<span class="subst">{<span class="built_in">list</span>[<span class="number">1</span>][<span class="number">0</span>:<span class="number">2</span>]}</span> \n"</span>)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">one line</span><br><span class="line"> [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="string">'cwh'</span>, <span class="literal">False</span>] </span><br><span class="line">two line </span><br><span class="line">[[<span class="number">4</span>, <span class="number">3</span>, <span class="number">1</span>], <span class="string">'lyr'</span>]</span><br></pre></td></tr></table></figure>
+<p>首先我们需要跟传统的list进行一个简单的对比分析我们可以看到，list内部进行索引的值只能为一个integer类型，我们可以把它等价于c++中的<code>vector</code>，唯一比较特别的点是索引必须使用的类型应该是<code>[]</code>这种类型</p>
+<ol>
+<li>Tensor的拼接（非常重要，很多bug都出自这里）</li>
+</ol>
+<p>拼接的方式可太多种了，可以参考一下numpy的广播机制，但是写程序的思维还是要有的，只知道文档所在，但是写不出来自己的程序其实是一件很痛苦的事情。解决办法就是多练，多尝试把自己的想法转换成代码的形式。</p>
+<ul>
+<li>torch.cat</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">data = torch.rand(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">col_data = torch.cat([data, data, data], dim = <span class="number">1</span>) <span class="comment"># dim = 1 是按照列</span></span><br><span class="line">row_data = torch.cat([data, data, data], dim = <span class="number">0</span>) <span class="comment"># dim = 0</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f'row data is \n <span class="subst">{row_data}</span>  \n col data is\n <span class="subst">{col_data}</span>'</span>)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"></span><br><span class="line">row data <span class="keyword">is</span> </span><br><span class="line"> tensor([[<span class="number">0.3420</span>, <span class="number">0.5119</span>, <span class="number">0.3018</span>],</span><br><span class="line">        [<span class="number">0.9372</span>, <span class="number">0.5363</span>, <span class="number">0.3074</span>],</span><br><span class="line">        [<span class="number">0.3420</span>, <span class="number">0.5119</span>, <span class="number">0.3018</span>],</span><br><span class="line">        [<span class="number">0.9372</span>, <span class="number">0.5363</span>, <span class="number">0.3074</span>],</span><br><span class="line">        [<span class="number">0.3420</span>, <span class="number">0.5119</span>, <span class="number">0.3018</span>],</span><br><span class="line">        [<span class="number">0.9372</span>, <span class="number">0.5363</span>, <span class="number">0.3074</span>]])  </span><br><span class="line"> col data <span class="keyword">is</span></span><br><span class="line"> tensor([[<span class="number">0.3420</span>, <span class="number">0.5119</span>, <span class="number">0.3018</span>, <span class="number">0.3420</span>, <span class="number">0.5119</span>, <span class="number">0.3018</span>, <span class="number">0.3420</span>, <span class="number">0.5119</span>, <span class="number">0.3018</span>],</span><br><span class="line">        [<span class="number">0.9372</span>, <span class="number">0.5363</span>, <span class="number">0.3074</span>, <span class="number">0.9372</span>, <span class="number">0.5363</span>, <span class="number">0.3074</span>, <span class="number">0.9372</span>, <span class="number">0.5363</span>, <span class="number">0.3074</span>]])</span><br></pre></td></tr></table></figure>
+<ul>
+<li>torch.stack</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<ol>
+<li>Tensor的点积和矩阵乘法</li>
+</ol>
+<p>首先我们区分一下点积和矩阵乘法，点积要求的是两个矩阵同样大小，例如同行数同列数，（3,4）和（3,4）</p>
+<p>矩阵乘法：要求后面一个矩阵的行数等于前面的一个矩阵的列数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 逐个元素进行相乘 例如点积</span></span><br><span class="line">data = torch.rand(<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line">data_mul = data.mul(data)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f'raw data\n<span class="subst">{data}</span> \n mul data\n<span class="subst">{data_mul}</span>'</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f'tensor * tensor \n <span class="subst">{data * data}</span>'</span>) <span class="comment"># 点积可以直接使用乘法符号进行实现</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 矩阵乘法计算</span></span><br><span class="line">matrix = torch.rand(<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">matrix_mul = matrix.matmul(matrix.T)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f'raw matrix\n<span class="subst">{matrix}</span> \n mul matrix\n<span class="subst">{matrix_mul}</span>'</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f'matrix * matrix \n <span class="subst">{matrix @ matrix.T}</span>'</span>)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"></span><br><span class="line">raw data</span><br><span class="line">tensor([[<span class="number">0.2064</span>, <span class="number">0.1075</span>, <span class="number">0.9492</span>, <span class="number">0.8438</span>],</span><br><span class="line">        [<span class="number">0.1446</span>, <span class="number">0.6204</span>, <span class="number">0.3425</span>, <span class="number">0.1634</span>],</span><br><span class="line">        [<span class="number">0.3915</span>, <span class="number">0.3551</span>, <span class="number">0.9497</span>, <span class="number">0.8890</span>]]) </span><br><span class="line"> mul data</span><br><span class="line">tensor([[<span class="number">0.0426</span>, <span class="number">0.0116</span>, <span class="number">0.9010</span>, <span class="number">0.7120</span>],</span><br><span class="line">        [<span class="number">0.0209</span>, <span class="number">0.3848</span>, <span class="number">0.1173</span>, <span class="number">0.0267</span>],</span><br><span class="line">        [<span class="number">0.1533</span>, <span class="number">0.1261</span>, <span class="number">0.9019</span>, <span class="number">0.7904</span>]])</span><br><span class="line">tensor * tensor </span><br><span class="line"> tensor([[<span class="number">0.0426</span>, <span class="number">0.0116</span>, <span class="number">0.9010</span>, <span class="number">0.7120</span>],</span><br><span class="line">        [<span class="number">0.0209</span>, <span class="number">0.3848</span>, <span class="number">0.1173</span>, <span class="number">0.0267</span>],</span><br><span class="line">        [<span class="number">0.1533</span>, <span class="number">0.1261</span>, <span class="number">0.9019</span>, <span class="number">0.7904</span>]])</span><br><span class="line"></span><br><span class="line">raw matrix</span><br><span class="line">tensor([[<span class="number">0.4177</span>, <span class="number">0.2848</span>, <span class="number">0.1641</span>, <span class="number">0.7694</span>],</span><br><span class="line">        [<span class="number">0.7248</span>, <span class="number">0.9181</span>, <span class="number">0.2790</span>, <span class="number">0.0580</span>],</span><br><span class="line">        [<span class="number">0.8787</span>, <span class="number">0.1998</span>, <span class="number">0.5819</span>, <span class="number">0.2855</span>]]) </span><br><span class="line"> mul matrix</span><br><span class="line">tensor([[<span class="number">0.8744</span>, <span class="number">0.6546</span>, <span class="number">0.7391</span>],</span><br><span class="line">        [<span class="number">0.6546</span>, <span class="number">1.4494</span>, <span class="number">0.9993</span>],</span><br><span class="line">        [<span class="number">0.7391</span>, <span class="number">0.9993</span>, <span class="number">1.2322</span>]])</span><br><span class="line">matrix * matrix </span><br><span class="line"> tensor([[<span class="number">0.8744</span>, <span class="number">0.6546</span>, <span class="number">0.7391</span>],</span><br><span class="line">        [<span class="number">0.6546</span>, <span class="number">1.4494</span>, <span class="number">0.9993</span>],</span><br><span class="line">        [<span class="number">0.7391</span>, <span class="number">0.9993</span>, <span class="number">1.2322</span>]])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以很好理解，<code>tensor.mul</code>理解为矩阵点乘（等价于*运算符），<code>tensor.matmul</code>理解为矩阵乘法（等价于@运算符）</p>
+<ol>
+<li>自动赋值计算</li>
+</ol>
+<p>一般来说，自动赋值的话末尾为增加一个<code>_</code>作为后缀，这种就是对所有元素都进行一次相同的操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">print(data)</span><br><span class="line">data_t = data.add_(5)</span><br><span class="line">data_t</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"></span><br><span class="line">tensor([[0.2064, 0.1075, 0.9492, 0.8438],</span><br><span class="line">        [0.1446, 0.6204, 0.3425, 0.1634],</span><br><span class="line">        [0.3915, 0.3551, 0.9497, 0.8890]])</span><br><span class="line">tensor([[5.2064, 5.1075, 5.9492, 5.8438],</span><br><span class="line">        [5.1446, 5.6204, 5.3425, 5.1634],</span><br><span class="line">        [5.3915, 5.3551, 5.9497, 5.8890]])</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/pytorch/" rel="tag"><i class="fa fa-tag"></i> pytorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/50706/" rel="prev" title="数据结构day04">
+      <i class="fa fa-chevron-left"></i> 数据结构day04
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%A0%E9%87%8F-Tensor"><span class="nav-number">1.</span> <span class="nav-text">张量 Tensor</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tensor%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">Tensor初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tensor%E7%9A%84%E8%BF%90%E7%AE%97"><span class="nav-number">1.2.</span> <span class="nav-text">Tensor的运算</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Jason"
+      src="/images/avatar.webp">
+  <p class="site-author-name" itemprop="name">Jason</p>
+  <div class="site-description" itemprop="description">三玖天下第一</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+<div id = "music163player">
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1889674362&auto=0&height=66"></iframe>
+</div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jason</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'fM57AVQq78R8cMTbcnjFem3L-MdYXbMMI',
+      appKey     : 'vXJ6hX3YByytp1Puk2fOCIf6',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+  
+    <script src="/js/cursor/fireworks.js"></script>
+  
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":250,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
